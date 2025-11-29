@@ -12,8 +12,24 @@ interface ClientCreationFormProps {
 }
 
 export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
+  const [shareholderNames, setShareholderNames] = useState<string[]>(['']);
   const [clientNames, setClientNames] = useState<string[]>(['']);
   const [documents, setDocuments] = useState<File[]>([]);
+
+  const addShareholderName = () => {
+    setShareholderNames([...shareholderNames, '']);
+  };
+
+  const removeShareholderName = (index: number) => {
+    const newNames = shareholderNames.filter((_, i) => i !== index);
+    setShareholderNames(newNames);
+  };
+
+  const updateShareholderName = (index: number, value: string) => {
+    const newNames = [...shareholderNames];
+    newNames[index] = value;
+    setShareholderNames(newNames);
+  };
 
   const addClientName = () => {
     setClientNames([...clientNames, '']);
@@ -41,29 +57,29 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => onNavigate('dashboard')}>
-              <ArrowLeft className="w-5 h-5" />
+        <div className="w-full mx-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <Button variant="ghost" size="icon" onClick={() => onNavigate('dashboard')} className="shrink-0">
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
-            <div>
-              <h1 className="text-gray-900">Create New Client/Case</h1>
-              <p className="text-gray-600 text-sm">Process 1: Client Creation Form</p>
+            <div className="min-w-0">
+              <h1 className="text-gray-900 truncate">Create New Client/Case</h1>
+              <p className="text-gray-600 text-xs sm:text-sm">Process 1: Client Creation Form</p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         <form onSubmit={handleSubmit}>
           <Card>
             <CardHeader>
               <CardTitle>Basic Information</CardTitle>
               <p className="text-gray-600 text-sm mt-1">Case Create Date: {new Date().toLocaleDateString()}</p>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 sm:space-y-6">
               {/* Lead Source & Contact Person */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <Label htmlFor="lead">Lead Source *</Label>
                   <Select required>
@@ -85,13 +101,41 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
                 </div>
               </div>
 
+              {/* Shareholder Names (Multiple) */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label>Shareholder Names *</Label>
+                  <Button type="button" variant="outline" size="sm" onClick={addShareholderName}>
+                    <UserPlus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <span className="text-xs sm:text-sm">Add</span>
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  {shareholderNames.map((name, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={name}
+                        onChange={(e) => updateShareholderName(index, e.target.value)}
+                        placeholder={`Shareholder ${index + 1} name`}
+                        required
+                      />
+                      {shareholderNames.length > 1 && (
+                        <Button type="button" variant="ghost" size="icon" onClick={() => removeShareholderName(index)} className="shrink-0">
+                          <X className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Client Names (Multiple) */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <Label>Client Names (Family Members) *</Label>
                   <Button type="button" variant="outline" size="sm" onClick={addClientName}>
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Add Member
+                    <UserPlus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <span className="text-xs sm:text-sm">Add Member</span>
                   </Button>
                 </div>
                 <div className="space-y-2">
@@ -104,7 +148,7 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
                         required
                       />
                       {clientNames.length > 1 && (
-                        <Button type="button" variant="ghost" size="icon" onClick={() => removeClientName(index)}>
+                        <Button type="button" variant="ghost" size="icon" onClick={() => removeClientName(index)} className="shrink-0">
                           <X className="w-4 h-4" />
                         </Button>
                       )}
@@ -114,10 +158,14 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
               </div>
 
               {/* Contact Details */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div>
                   <Label htmlFor="mobile">Mobile Number *</Label>
                   <Input id="mobile" type="tel" placeholder="Enter mobile number" required />
+                </div>
+                <div>
+                  <Label htmlFor="alt-mobile">Alternate Mobile</Label>
+                  <Input id="alt-mobile" type="tel" placeholder="Alternate mobile" />
                 </div>
                 <div>
                   <Label htmlFor="landline">Landline</Label>
@@ -136,7 +184,7 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
               </div>
 
               {/* Addresses */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <Label htmlFor="new-address">New Address *</Label>
                   <Textarea id="new-address" placeholder="Enter current address" rows={3} required />
@@ -147,32 +195,18 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
                 </div>
               </div>
 
-              {/* KYC & Demat */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="kyc">KYC Completed *</Label>
-                  <Select required>
-                    <SelectTrigger id="kyc">
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="demat">Demat Created *</Label>
-                  <Select required>
-                    <SelectTrigger id="demat">
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No - Assign to create</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              {/* Demat */}
+              <div>
+                <Label htmlFor="demat">Demat Created *</Label>
+                <Select required>
+                  <SelectTrigger id="demat">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">No - Assign to create</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Assigned To (if Demat not created) */}
@@ -184,9 +218,9 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
               {/* Documents Upload */}
               <div>
                 <Label htmlFor="documents">Documents Upload (PDF, JPEG, etc.) *</Label>
-                <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors cursor-pointer">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600 text-sm">Click to upload or drag and drop</p>
+                <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center hover:border-indigo-400 transition-colors cursor-pointer">
+                  <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-gray-600 text-xs sm:text-sm">Click to upload or drag and drop</p>
                   <p className="text-gray-500 text-xs mt-1">PDF, JPG, PNG up to 10MB each</p>
                   <Input id="documents" type="file" multiple className="hidden" />
                 </div>
@@ -195,7 +229,7 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
               {/* Death Certificate */}
               <div>
                 <Label htmlFor="death-cert">Death Certificate (if applicable)</Label>
-                <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-3 sm:p-4 text-center">
                   <Input id="death-cert" type="file" />
                 </div>
               </div>
@@ -264,16 +298,16 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
               </div>
 
               {/* Submit Button */}
-              <div className="flex gap-4 pt-4">
-                <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+                <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 w-full sm:w-auto">
                   Submit & Send to Valuation Team
                 </Button>
-                <Button type="button" variant="outline" onClick={() => onNavigate('dashboard')}>
+                <Button type="button" variant="outline" onClick={() => onNavigate('dashboard')} className="w-full sm:w-auto">
                   Cancel
                 </Button>
               </div>
 
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-500 text-xs sm:text-sm">
                 * Upon submission, this case will be timestamped and sent to valuation employee with notification
               </p>
             </CardContent>

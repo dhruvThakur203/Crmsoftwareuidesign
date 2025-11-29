@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { toast } from 'sonner';
 
 interface ManageUsersProps {
-  onNavigate: (page: 'login' | 'dashboard' | 'create-client' | 'client-detail' | 'all-cases' | 'manage-users', clientId?: string) => void;
+  onNavigate: (page: 'login' | 'dashboard' | 'create-client' | 'client-detail' | 'all-cases' | 'manage-users' | 'reminders', clientId?: string) => void;
 }
 
 interface User {
