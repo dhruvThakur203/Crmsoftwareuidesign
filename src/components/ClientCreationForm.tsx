@@ -219,6 +219,7 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
               <DocumentUploadSystem 
                 shareholders={shareholderNames.filter(name => name.trim())}
                 allowLaterUpload={false}
+                showBlankFormats={false}
               />
 
               {/* All Documents Collected */}

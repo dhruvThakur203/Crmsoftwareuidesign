@@ -5,6 +5,7 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
+import { BlankDraftFormats } from './BlankDraftFormats';
 
 // Document categories
 const DOCUMENT_CATEGORIES = {
@@ -68,12 +69,14 @@ interface DocumentUploadSystemProps {
   shareholders: string[];
   onDocumentsChange?: (documents: UploadedDocument[]) => void;
   allowLaterUpload?: boolean;
+  showBlankFormats?: boolean;
 }
 
 export function DocumentUploadSystem({
   shareholders,
   onDocumentsChange,
   allowLaterUpload = true,
+  showBlankFormats = true,
 }: DocumentUploadSystemProps) {
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [selectedShareholder, setSelectedShareholder] = useState<string>(shareholders[0] || '');
@@ -141,6 +144,9 @@ export function DocumentUploadSystem({
 
   return (
     <div className="space-y-4 sm:space-y-6">
+      {/* Blank Draft Formats Section */}
+      {showBlankFormats && <BlankDraftFormats shareholders={shareholders} />}
+
       {/* Upload Section */}
       <Card>
         <CardHeader>

@@ -28,7 +28,62 @@ interface CompanyKYC {
 export function ClientDetailPage({ onNavigate, userRole = 'RM' }: ClientDetailPageProps) {
   const [pendingDocsFlag, setPendingDocsFlag] = useState(false);
   const [editingKYC, setEditingKYC] = useState(false);
-  const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
+  const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([
+    {
+      id: 'doc-001',
+      fileName: 'Pan Card.pdf',
+      category: 'Identity Documents',
+      documentType: 'Pan Card',
+      shareholder: 'Rajesh Kumar',
+      size: 245000,
+      uploadDate: '2025-11-15 10:30:00',
+    },
+    {
+      id: 'doc-002',
+      fileName: 'Aadhar Front.jpg',
+      category: 'Identity Documents',
+      documentType: 'Aadhar Front',
+      shareholder: 'Rajesh Kumar',
+      size: 512000,
+      uploadDate: '2025-11-15 10:35:00',
+    },
+    {
+      id: 'doc-003',
+      fileName: 'Share Certificate 1.pdf',
+      category: 'Financial & Share Documents',
+      documentType: 'Share Certificate PDF',
+      shareholder: 'Rajesh Kumar',
+      size: 1200000,
+      uploadDate: '2025-11-16 14:20:00',
+    },
+    {
+      id: 'doc-004',
+      fileName: 'ISR1.pdf',
+      category: 'Financial & Share Documents',
+      documentType: 'ISR1',
+      shareholder: 'Sunita Kumar',
+      size: 345000,
+      uploadDate: '2025-11-16 15:10:00',
+    },
+    {
+      id: 'doc-005',
+      fileName: 'Letter of Confirmation.pdf',
+      category: 'Authority & Company Documents',
+      documentType: 'Letter of Confirmation',
+      shareholder: 'Rajesh Kumar',
+      size: 456000,
+      uploadDate: '2025-11-17 09:45:00',
+    },
+    {
+      id: 'doc-006',
+      fileName: 'Bank Account Proof.pdf',
+      category: 'Miscellaneous',
+      documentType: 'Misc 1',
+      shareholder: 'Sunita Kumar',
+      size: 678000,
+      uploadDate: '2025-11-17 11:20:00',
+    },
+  ]);
   const [companyKYCs, setCompanyKYCs] = useState<CompanyKYC[]>([
     { companyName: 'Reliance Industries Ltd', kycCompleted: true, lastUpdated: '2025-11-20 10:30:00' },
     { companyName: 'Tata Motors Ltd', kycCompleted: false, lastUpdated: '2025-11-18 14:15:00' },
@@ -359,11 +414,41 @@ export function ClientDetailPage({ onNavigate, userRole = 'RM' }: ClientDetailPa
           </TabsContent>
 
           <TabsContent value="documents">
-            <DocumentUploadSystem 
-              shareholders={clientData.shareholders}
-              onDocumentsChange={(docs) => setUploadedDocuments(docs)}
-              allowLaterUpload={true}
-            />
+            <div className="space-y-6">
+              <DocumentUploadSystem 
+                shareholders={clientData.shareholders}
+                onDocumentsChange={(docs) => setUploadedDocuments(docs)}
+                allowLaterUpload={true}
+                showBlankFormats={true}
+              />
+
+              {/* Uploaded Documents Summary */}
+              {uploadedDocuments.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Documents Uploaded for {clientData.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {uploadedDocuments.map((doc: any) => (
+                        <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <FileText className="w-5 h-5 text-indigo-600 shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-gray-900 font-medium text-sm truncate">{doc.fileName}</p>
+                              <p className="text-gray-500 text-xs">
+                                {doc.shareholder} • {doc.documentType} • {doc.uploadDate}
+                              </p>
+                            </div>
+                          </div>
+                          <Badge variant="outline" className="shrink-0 text-xs">{doc.category}</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </TabsContent>
 
           <TabsContent value="activity-log">
