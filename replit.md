@@ -21,6 +21,8 @@ Originally imported from: https://www.figma.com/design/knANnoW2Greaq0lnDFKJyC/CR
 
 ### Project Structure
 ```
+├── public/
+│   └── formsection/      # Form documents (PDF/DOCX) for production downloads
 ├── src/
 │   ├── components/
 │   │   ├── ui/           # Reusable UI components (buttons, cards, etc.)
@@ -29,7 +31,7 @@ Originally imported from: https://www.figma.com/design/knANnoW2Greaq0lnDFKJyC/CR
 │   │   ├── UserDashboard.tsx
 │   │   ├── ClientsTable.tsx
 │   │   └── ... (other feature components)
-│   ├── formsection/      # Document templates and forms
+│   ├── formsection/      # Source document templates (copied to public/)
 │   ├── guidelines/       # Project guidelines
 │   ├── styles/           # Global styles
 │   ├── App.tsx           # Main application component
@@ -103,6 +105,8 @@ The project is configured for static deployment:
 - ✅ Added module type to package.json for ES modules
 - ✅ Updated .gitignore for Node.js projects
 - ✅ Verified application runs successfully with pre-compiled Tailwind CSS
+- ✅ Fixed production deployment: moved form documents to public/formsection for downloads
+- ✅ Updated BlankDraftFormats component to use correct paths for production builds
 
 ## User Preferences
 None recorded yet.
@@ -120,3 +124,4 @@ The application includes demo credentials for testing different user roles:
 - The UI is fully responsive and uses Tailwind's utility classes
 - Components follow the shadcn/ui pattern with Radix UI primitives
 - Tailwind CSS v4 styles are pre-compiled and included in `src/index.css`
+- Form documents must be in `public/formsection/` for production downloads to work
