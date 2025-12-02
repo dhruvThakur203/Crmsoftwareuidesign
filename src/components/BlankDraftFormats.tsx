@@ -126,10 +126,8 @@ export function BlankDraftFormats({ shareholders }: BlankDraftFormatsProps) {
 
   const downloadDocument = async (folder: string, fileName: string) => {
     try {
-      // Construct the path to the document
-      const docPath = `/src/formsection/${folder}/${fileName}`;
-      // In a real app, you'd fetch from your server
-      // For now, we'll create a simple download link
+      // Construct the path to the document (served from public folder)
+      const docPath = `/formsection/${folder}/${fileName}`;
       const link = globalThis.document.createElement('a');
       link.href = docPath;
       link.download = fileName;
