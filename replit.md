@@ -34,11 +34,9 @@ Originally imported from: https://www.figma.com/design/knANnoW2Greaq0lnDFKJyC/CR
 │   ├── styles/           # Global styles
 │   ├── App.tsx           # Main application component
 │   ├── main.tsx          # Application entry point
-│   └── index.css         # Global CSS
+│   └── index.css         # Pre-compiled Tailwind CSS v4 styles
 ├── index.html
 ├── vite.config.ts        # Vite configuration
-├── tailwind.config.js    # Tailwind CSS configuration
-├── postcss.config.js     # PostCSS configuration
 └── package.json
 ```
 
@@ -63,7 +61,7 @@ Originally imported from: https://www.figma.com/design/knANnoW2Greaq0lnDFKJyC/CR
 Dependencies are automatically installed when the project starts. The project uses:
 - React and React DOM for the UI framework
 - Vite for fast development and building
-- Tailwind CSS for styling
+- Pre-compiled Tailwind CSS v4 styles (included in index.css)
 - Multiple Radix UI components for accessible UI primitives
 
 ### Running the Application
@@ -99,18 +97,26 @@ The project is configured for static deployment:
 - **Public Directory**: `build/`
 
 ## Recent Changes (December 2, 2025)
-- ✅ Added Tailwind CSS and PostCSS configuration files
-- ✅ Updated Vite config to use port 5000 and bind to 0.0.0.0 for Replit environment
-- ✅ Configured development workflow for webview on port 5000
-- ✅ Set up static deployment configuration
-- ✅ Added module type to package.json
+- ✅ Configured Vite to use port 5000 and bind to 0.0.0.0 for Replit environment
+- ✅ Set up development workflow for webview on port 5000
+- ✅ Configured static deployment (build command and public directory)
+- ✅ Added module type to package.json for ES modules
 - ✅ Updated .gitignore for Node.js projects
+- ✅ Verified application runs successfully with pre-compiled Tailwind CSS
 
 ## User Preferences
 None recorded yet.
+
+## Demo Credentials
+The application includes demo credentials for testing different user roles:
+- **Admin**: admin/admin123
+- **RM**: rm1/rm123
+- **Field Boy**: field1/field123
+- **Valuation Analyst**: valuation1/valuation123
 
 ## Notes
 - The application uses client-side routing via state management (no router library)
 - All documents and forms are stored in the `src/formsection/` directory
 - The UI is fully responsive and uses Tailwind's utility classes
 - Components follow the shadcn/ui pattern with Radix UI primitives
+- Tailwind CSS v4 styles are pre-compiled and included in `src/index.css`
