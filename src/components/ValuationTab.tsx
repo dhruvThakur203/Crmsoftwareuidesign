@@ -192,7 +192,7 @@ export function ValuationTab() {
                   </div>
 
                   <div>
-                    <Label>Split Ratio</Label>
+                    <Label>Face Value</Label>
                     <Input
                       type="number"
                       value={entry.split}

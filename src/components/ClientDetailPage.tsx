@@ -15,7 +15,7 @@ import { toast } from 'sonner@2.0.3';
 interface ClientDetailPageProps {
   onNavigate: (page: 'dashboard') => void;
   clientId: string | null;
-  userRole?: string;
+  userRole?: 'Master Admin' | 'RM' | 'Field Boy' | 'Valuation Analyst';
 }
 
 interface CompanyKYC {

@@ -59,7 +59,7 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
               </div>
               <div className="min-w-0">
                 <h1 className="text-gray-900 truncate text-sm sm:text-base lg:text-lg">Master Admin Dashboard</h1>
-                <p className="text-gray-600 text-xs sm:text-sm hidden sm:block">Share Claim CRM System</p>
+                <p className="text-gray-600 text-xs sm:text-sm hidden sm:block">WealthMax CRM</p>
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-4 shrink-0">

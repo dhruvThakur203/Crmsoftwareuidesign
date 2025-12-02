@@ -5,7 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 
 interface LoginPageProps {
-  onLogin: (role: 'Master Admin' | 'RM' | 'Field Boy', userName: string) => void;
+  onLogin: (role: 'Master Admin' | 'RM' | 'Field Boy' | 'Valuation Analyst', userName: string) => void;
 }
 
 export function LoginPage({ onLogin }: LoginPageProps) {
@@ -24,6 +24,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       'rm2': { password: 'rm123', role: 'RM' as const, name: 'Anjali Reddy' },
       'field1': { password: 'field123', role: 'Field Boy' as const, name: 'Ravi Kumar' },
       'field2': { password: 'field123', role: 'Field Boy' as const, name: 'Suresh Yadav' },
+      'valuation1': { password: 'valuation123', role: 'Valuation Analyst' as const, name: 'Priya Sharma' },
+      'valuation2': { password: 'valuation123', role: 'Valuation Analyst' as const, name: 'Amit Patel' },
     };
 
     const user = users[username as keyof typeof users];
@@ -43,7 +45,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             <Lock className="w-8 h-8 text-white" />
           </div>
         </div>
-        <h1 className="text-center mb-2 text-gray-900">Share Claim CRM</h1>
+        <h1 className="text-center mb-2 text-gray-900">WealthMax CRM</h1>
         <p className="text-center text-gray-600 mb-8">Login with credentials provided by Master Admin</p>
         
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -100,6 +102,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           <p className="text-blue-700 text-xs">Admin: admin/admin123</p>
           <p className="text-blue-700 text-xs">RM: rm1/rm123</p>
           <p className="text-blue-700 text-xs">Field Boy: field1/field123</p>
+          <p className="text-blue-700 text-xs">Valuation Analyst: valuation1/valuation123</p>
         </div>
       </div>
     </div>

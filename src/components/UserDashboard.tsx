@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 interface UserDashboardProps {
   onNavigate: (page: 'login' | 'dashboard' | 'create-client' | 'client-detail' | 'all-cases' | 'manage-users' | 'reminders', clientId?: string) => void;
-  userRole: 'RM' | 'Field Boy';
+  userRole: 'RM' | 'Field Boy' | 'Valuation Analyst';
   userName: string;
 }
 

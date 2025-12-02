@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 interface AllCasesViewProps {
   onNavigate: (page: 'login' | 'dashboard' | 'create-client' | 'client-detail' | 'all-cases' | 'manage-users' | 'reminders', clientId?: string) => void;
-  userRole: 'Master Admin' | 'RM' | 'Field Boy';
+  userRole: 'Master Admin' | 'RM' | 'Field Boy' | 'Valuation Analyst';
 }
 
 export function AllCasesView({ onNavigate, userRole }: AllCasesViewProps) {

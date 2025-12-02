@@ -12,10 +12,10 @@ import { Toaster } from './components/ui/sonner';
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'login' | 'dashboard' | 'create-client' | 'client-detail' | 'all-cases' | 'manage-users' | 'reminders'>('login');
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<'Master Admin' | 'RM' | 'Field Boy' | null>(null);
+  const [userRole, setUserRole] = useState<'Master Admin' | 'RM' | 'Field Boy' | 'Valuation Analyst' | null>(null);
   const [userName, setUserName] = useState<string>('');
 
-  const handleLogin = (role: 'Master Admin' | 'RM' | 'Field Boy', name: string) => {
+  const handleLogin = (role: 'Master Admin' | 'RM' | 'Field Boy' | 'Valuation Analyst', name: string) => {
     setUserRole(role);
     setUserName(name);
     setCurrentPage('dashboard');
@@ -38,7 +38,7 @@ export default function App() {
         {currentPage === 'dashboard' && userRole === 'Master Admin' && (
           <AdminDashboard onNavigate={handleNavigate} />
         )}
-        {currentPage === 'dashboard' && (userRole === 'RM' || userRole === 'Field Boy') && (
+        {currentPage === 'dashboard' && (userRole === 'RM' || userRole === 'Field Boy' || userRole === 'Valuation Analyst') && (
           <UserDashboard onNavigate={handleNavigate} userRole={userRole} userName={userName} />
         )}
         {currentPage === 'all-cases' && userRole && (

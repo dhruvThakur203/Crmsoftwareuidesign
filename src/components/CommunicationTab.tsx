@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Phone, MessageSquare, Send, Clock, CheckCircle, AlertCircle, FileText, Copy } from 'lucide-react';
+import { Phone, MessageSquare, Send, Clock, AlertCircle, FileText, Copy, Plus, Edit2, Trash2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import { toast } from 'sonner@2.0.3';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
@@ -41,8 +42,11 @@ export function CommunicationTab({ clientName, primaryMobile, alternateMobile, u
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [callInProgress, setCallInProgress] = useState(false);
   const [smsInProgress, setSmsInProgress] = useState(false);
+  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState<SMSTemplate | null>(null);
+  const [isNewTemplate, setIsNewTemplate] = useState(false);
 
-  const smsTemplates: SMSTemplate[] = [
+  const [smsTemplates, setSmsTemplates] = useState<SMSTemplate[]>([
     {
       id: '1',
       name: 'Initial Contact',
@@ -85,7 +89,7 @@ export function CommunicationTab({ clientName, primaryMobile, alternateMobile, u
       content: `Dear ${clientName}, Congratulations! Your shares have been successfully transferred to your demat account. Thank you for choosing our services. - Share Recovery Team`,
       category: 'closure'
     }
-  ];
+  ]);
 
   const [communicationLogs, setCommunicationLogs] = useState<CommunicationLog[]>([
     {
@@ -129,6 +133,50 @@ export function CommunicationTab({ clientName, primaryMobile, alternateMobile, u
       phoneNumber: primaryMobile
     }
   ]);
+
+  const openAddTemplateDialog = () => {
+    setEditingTemplate({
+      id: Date.now().toString(),
+      name: '',
+      content: `Dear ${clientName}, `,
+      category: 'other'
+    });
+    setIsNewTemplate(true);
+    setIsTemplateDialogOpen(true);
+  };
+
+  const openEditTemplateDialog = (template: SMSTemplate) => {
+    setEditingTemplate(template);
+    setIsNewTemplate(false);
+    setIsTemplateDialogOpen(true);
+  };
+
+  const saveTemplate = () => {
+    if (!editingTemplate) return;
+
+    if (!editingTemplate.name.trim() || !editingTemplate.content.trim()) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    if (isNewTemplate) {
+      setSmsTemplates([...smsTemplates, editingTemplate]);
+      toast.success('Template added successfully');
+    } else {
+      setSmsTemplates(smsTemplates.map(t => 
+        t.id === editingTemplate.id ? editingTemplate : t
+      ));
+      toast.success('Template updated successfully');
+    }
+
+    setIsTemplateDialogOpen(false);
+    setEditingTemplate(null);
+  };
+
+  const deleteTemplate = (templateId: string) => {
+    setSmsTemplates(smsTemplates.filter(t => t.id !== templateId));
+    toast.success('Template deleted');
+  };
 
   const handleInitiateCall = () => {
     if (userRole === 'Field Boy') {
@@ -376,11 +424,17 @@ export function CommunicationTab({ clientName, primaryMobile, alternateMobile, u
 
       {/* SMS Templates Reference */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="w-5 h-5" />
-            Available SMS Templates
-          </CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Available SMS Templates
+            </CardTitle>
+          </div>
+          <Button onClick={openAddTemplateDialog} className="bg-blue-600 hover:bg-blue-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Template
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -391,13 +445,30 @@ export function CommunicationTab({ clientName, primaryMobile, alternateMobile, u
                     <p className="text-gray-900">{template.name}</p>
                     <Badge variant="outline" className="mt-1">{template.category}</Badge>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => copyToClipboard(template.content)}
-                  >
-                    <Copy className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => copyToClipboard(template.content)}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => openEditTemplateDialog(template)}
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => deleteTemplate(template.id)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
                 <p className="text-gray-600 text-sm mt-2">{template.content}</p>
               </div>
@@ -469,6 +540,62 @@ export function CommunicationTab({ clientName, primaryMobile, alternateMobile, u
           </div>
         </CardContent>
       </Card>
+
+      {/* Template Edit Dialog */}
+      <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {isNewTemplate ? 'Add New SMS Template' : 'Edit SMS Template'}
+            </DialogTitle>
+          </DialogHeader>
+          
+          {editingTemplate && (
+            <div className="space-y-4">
+              <div>
+                <Label>Template Name</Label>
+                <Input
+                  value={editingTemplate.name}
+                  onChange={(e) => setEditingTemplate({ ...editingTemplate, name: e.target.value })}
+                  placeholder="e.g., Follow Up"
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label>Category</Label>
+                <Input
+                  value={editingTemplate.category}
+                  onChange={(e) => setEditingTemplate({ ...editingTemplate, category: e.target.value })}
+                  placeholder="e.g., followup"
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label>Message Content</Label>
+                <Textarea
+                  value={editingTemplate.content}
+                  onChange={(e) => setEditingTemplate({ ...editingTemplate, content: e.target.value })}
+                  placeholder="Type your message template..."
+                  rows={6}
+                  className="mt-1"
+                />
+                <p className="text-gray-500 text-xs mt-1">{editingTemplate.content.length}/500 characters</p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setIsTemplateDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={saveTemplate} className="bg-blue-600 hover:bg-blue-700">
+              Save Template
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Integration Info */}
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">

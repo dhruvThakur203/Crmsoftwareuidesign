@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, ArrowLeft, UserPlus, Trash2, Edit, Shield, Eye, EyeOff, UserCheck, AlertCircle } from 'lucide-react';
+import { Users, ArrowLeft, UserPlus, Trash2, Edit, Shield, Eye, EyeOff, UserCheck, AlertCircle, Calculator } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
@@ -19,7 +19,7 @@ interface User {
   name: string;
   username: string;
   password: string;
-  role: 'RM' | 'Field Boy';
+  role: 'RM' | 'Field Boy' | 'Valuation Analyst';
   status: 'Active' | 'Inactive';
   createdDate: string;
   activeCases: number;
@@ -43,6 +43,8 @@ export function ManageUsers({ onNavigate }: ManageUsersProps) {
     { id: '2', name: 'Anjali Reddy', username: 'rm2', password: 'rm123', role: 'RM', status: 'Active', createdDate: '2025-10-20', activeCases: 12 },
     { id: '3', name: 'Ravi Kumar', username: 'field1', password: 'field123', role: 'Field Boy', status: 'Active', createdDate: '2025-10-18', activeCases: 8 },
     { id: '4', name: 'Suresh Yadav', username: 'field2', password: 'field123', role: 'Field Boy', status: 'Active', createdDate: '2025-10-22', activeCases: 6 },
+    { id: '5', name: 'Priya Sharma', username: 'valuation1', password: 'valuation123', role: 'Valuation Analyst', status: 'Active', createdDate: '2025-11-01', activeCases: 10 },
+    { id: '6', name: 'Amit Patel', username: 'valuation2', password: 'valuation123', role: 'Valuation Analyst', status: 'Active', createdDate: '2025-11-05', activeCases: 9 },
   ]);
 
   const [pendingCases, setPendingCases] = useState<PendingCase[]>([
@@ -88,7 +90,7 @@ export function ManageUsers({ onNavigate }: ManageUsersProps) {
     name: '',
     username: '',
     password: '',
-    role: 'RM' as 'RM' | 'Field Boy',
+    role: 'RM' as 'RM' | 'Field Boy' | 'Valuation Analyst',
   });
 
   const handleAddUser = () => {
@@ -234,6 +236,7 @@ export function ManageUsers({ onNavigate }: ManageUsersProps) {
 
   const rmCount = users.filter(u => u.role === 'RM' && u.status === 'Active').length;
   const fieldBoyCount = users.filter(u => u.role === 'Field Boy' && u.status === 'Active').length;
+  const valuationAnalystCount = users.filter(u => u.role === 'Valuation Analyst' && u.status === 'Active').length;
   const activeRMs = users.filter(u => u.role === 'RM' && u.status === 'Active');
   const activeFieldBoys = users.filter(u => u.role === 'Field Boy' && u.status === 'Active');
   const unassignedCases = pendingCases.filter(c => !c.assignedRM || !c.assignedFieldBoy).length;
@@ -262,7 +265,7 @@ export function ManageUsers({ onNavigate }: ManageUsersProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="pt-6 px-6 pb-6">
               <div className="flex items-center gap-3">
@@ -285,6 +288,19 @@ export function ManageUsers({ onNavigate }: ManageUsersProps) {
                 <div>
                   <p className="text-gray-600 text-sm">Active Field Boys</p>
                   <p className="text-gray-900">{fieldBoyCount}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6 px-6 pb-6">
+              <div className="flex items-center gap-3">
+                <div className="bg-purple-100 p-2 rounded-lg">
+                  <Calculator className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-gray-600 text-sm">Valuation Analysts</p>
+                  <p className="text-gray-900">{valuationAnalystCount}</p>
                 </div>
               </div>
             </CardContent>
@@ -613,13 +629,14 @@ export function ManageUsers({ onNavigate }: ManageUsersProps) {
             </div>
             <div>
               <Label htmlFor="role">Role</Label>
-              <Select value={formData.role} onValueChange={(value: 'RM' | 'Field Boy') => setFormData({ ...formData, role: value })}>
+              <Select value={formData.role} onValueChange={(value: 'RM' | 'Field Boy' | 'Valuation Analyst') => setFormData({ ...formData, role: value })}>
                 <SelectTrigger className="mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="RM">RM (Relationship Manager)</SelectItem>
                   <SelectItem value="Field Boy">Field Boy</SelectItem>
+                  <SelectItem value="Valuation Analyst">Valuation Analyst</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -686,13 +703,14 @@ export function ManageUsers({ onNavigate }: ManageUsersProps) {
             </div>
             <div>
               <Label htmlFor="edit-role">Role</Label>
-              <Select value={formData.role} onValueChange={(value: 'RM' | 'Field Boy') => setFormData({ ...formData, role: value })}>
+              <Select value={formData.role} onValueChange={(value: 'RM' | 'Field Boy' | 'Valuation Analyst') => setFormData({ ...formData, role: value })}>
                 <SelectTrigger className="mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="RM">RM (Relationship Manager)</SelectItem>
                   <SelectItem value="Field Boy">Field Boy</SelectItem>
+                  <SelectItem value="Valuation Analyst">Valuation Analyst</SelectItem>
                 </SelectContent>
               </Select>
             </div>
