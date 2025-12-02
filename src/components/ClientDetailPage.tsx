@@ -7,6 +7,7 @@ import { Badge } from './ui/badge';
 import { ValuationTab } from './ValuationTab';
 import { ClientLogTable } from './ClientLogTable';
 import { CommunicationTab } from './CommunicationTab';
+import { DocumentUploadSystem } from './DocumentUploadSystem';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -27,6 +28,7 @@ interface CompanyKYC {
 export function ClientDetailPage({ onNavigate, userRole = 'RM' }: ClientDetailPageProps) {
   const [pendingDocsFlag, setPendingDocsFlag] = useState(false);
   const [editingKYC, setEditingKYC] = useState(false);
+  const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([]);
   const [companyKYCs, setCompanyKYCs] = useState<CompanyKYC[]>([
     { companyName: 'Reliance Industries Ltd', kycCompleted: true, lastUpdated: '2025-11-20 10:30:00' },
     { companyName: 'Tata Motors Ltd', kycCompleted: false, lastUpdated: '2025-11-18 14:15:00' },
@@ -357,33 +359,11 @@ export function ClientDetailPage({ onNavigate, userRole = 'RM' }: ClientDetailPa
           </TabsContent>
 
           <TabsContent value="documents">
-            <Card>
-              <CardHeader>
-                <CardTitle>Uploaded Documents</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 sm:space-y-3">
-                  {[
-                    { name: 'Pan Card.pdf', size: '245 KB', date: '2025-11-15' },
-                    { name: 'Aadhar Card.pdf', size: '312 KB', date: '2025-11-15' },
-                    { name: 'Share Certificate 1.jpg', size: '1.2 MB', date: '2025-11-15' },
-                    { name: 'Share Certificate 2.jpg', size: '1.4 MB', date: '2025-11-15' },
-                    { name: 'Bank Statement.pdf', size: '890 KB', date: '2025-11-15' },
-                  ].map((doc, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg gap-3">
-                      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                        <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 shrink-0" />
-                        <div className="min-w-0">
-                          <p className="text-gray-900 text-sm sm:text-base truncate">{doc.name}</p>
-                          <p className="text-gray-500 text-xs sm:text-sm">{doc.size} • {doc.date}</p>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm" className="shrink-0 text-xs sm:text-sm">View</Button>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <DocumentUploadSystem 
+              shareholders={clientData.shareholders}
+              onDocumentsChange={(docs) => setUploadedDocuments(docs)}
+              allowLaterUpload={true}
+            />
           </TabsContent>
 
           <TabsContent value="activity-log">

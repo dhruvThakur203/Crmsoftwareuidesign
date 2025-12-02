@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { ArrowLeft, Upload, UserPlus, X } from 'lucide-react';
+import { ArrowLeft, UserPlus, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { DocumentUploadSystem } from './DocumentUploadSystem';
 
 interface ClientCreationFormProps {
   onNavigate: (page: 'dashboard' | 'client-detail') => void;
@@ -14,7 +15,6 @@ interface ClientCreationFormProps {
 export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
   const [shareholderNames, setShareholderNames] = useState<string[]>(['']);
   const [clientNames, setClientNames] = useState<string[]>(['']);
-  const [documents, setDocuments] = useState<File[]>([]);
 
   const addShareholderName = () => {
     setShareholderNames([...shareholderNames, '']);
@@ -215,24 +215,11 @@ export function ClientCreationForm({ onNavigate }: ClientCreationFormProps) {
                 <Input id="assigned" placeholder="Enter assignee name" />
               </div>
 
-              {/* Documents Upload */}
-              <div>
-                <Label htmlFor="documents">Documents Upload (PDF, JPEG, etc.) *</Label>
-                <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center hover:border-indigo-400 transition-colors cursor-pointer">
-                  <Upload className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-600 text-xs sm:text-sm">Click to upload or drag and drop</p>
-                  <p className="text-gray-500 text-xs mt-1">PDF, JPG, PNG up to 10MB each</p>
-                  <Input id="documents" type="file" multiple className="hidden" />
-                </div>
-              </div>
-
-              {/* Death Certificate */}
-              <div>
-                <Label htmlFor="death-cert">Death Certificate (if applicable)</Label>
-                <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-3 sm:p-4 text-center">
-                  <Input id="death-cert" type="file" />
-                </div>
-              </div>
+              {/* Documents Upload - Categorical with Shareholder Tracking */}
+              <DocumentUploadSystem 
+                shareholders={shareholderNames.filter(name => name.trim())}
+                allowLaterUpload={false}
+              />
 
               {/* All Documents Collected */}
               <div>
